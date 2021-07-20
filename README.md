@@ -24,7 +24,7 @@ Documentation is published here [https://hexdocs.pm/filtery](https://hexdocs.pm/
 ```elixir
 filter = %{
 	status: "active",
-	email: %{not: nil},
+	email: {:not, nil},
 	role: ["admin", "moderator"]
 }
 Filtery.apply(User, filter)

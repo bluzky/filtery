@@ -76,7 +76,6 @@ defmodule Filtery.Base do
           ft = filter(key, val)
 
           cond do
-            nil -> acc
             is_nil(acc) -> dynamic([q], ^ft)
             ft -> dynamic([q], ^acc and ^ft)
             true -> acc
@@ -89,7 +88,6 @@ defmodule Filtery.Base do
           ft = filter(key, val)
 
           cond do
-            nil -> acc
             is_nil(acc) -> dynamic([q], ^ft)
             ft -> dynamic([q], ^acc or ^ft)
             true -> acc
@@ -226,6 +224,12 @@ defmodule Filtery.Base do
 
       def filter(column, {:icontains, value}) do
         filter(column, {:ilike, value})
+      end
+
+      # apply multiple condition on one column
+      def filter(column, %{} = value) do
+        conditions = Enum.map(value, &{column, &1})
+        filter(:and, conditions)
       end
 
       # DONE: default filter equal

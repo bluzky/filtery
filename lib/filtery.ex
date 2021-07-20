@@ -5,7 +5,7 @@ defmodule Filtery do
   ```elixir
   filter = %{
     status: "active",
-    email: %{not: nil},
+    email: {:not, nil},
     role: ["admin", "moderator"]
   }
   Filtery.apply(User, filter)
@@ -202,8 +202,4 @@ defmodule Filtery do
 
   use Filtery.Base
   @spec apply(Ecto.Queriable.t(), map() | keyword(), keyword()) :: Ecto.Query.Queriable.t()
-
-  def filter(column, {:equal, value}) do
-    filter(column, {:eq, value})
-  end
 end
