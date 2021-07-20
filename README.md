@@ -58,7 +58,11 @@ You can use `<field>: <value>` expressions to specify the equality condition and
 
 
 
-### Supported operator
+## Supported operator
+
+
+
+### 1. Comparition operator
 
 | `:eq`  | Matches values that are equal to a specified value.          |
 | ------ | :----------------------------------------------------------- |
@@ -72,7 +76,7 @@ You can use `<field>: <value>` expressions to specify the equality condition and
 
 
 
-### Logical operator
+### 2. Logical operator
 
 | Name   | Description                                                  |
 | ------ | ------------------------------------------------------------ |
@@ -83,7 +87,7 @@ You can use `<field>: <value>` expressions to specify the equality condition and
 
 
 
-### `AND` operator
+#### `AND` operator
 
 By default, if  a map or keyword list is given, `Filtery` will join all field condition of that map using `AND`
 
@@ -108,7 +112,7 @@ from(u in User, where: u.status == "active" and u.age > 20)
 
 
 
-### `OR` operator
+#### `OR` operator
 
 The `:or` operator performs a logical `OR` operation on an array of *two or more* `<expressions>` 
 
@@ -125,7 +129,7 @@ Filtery.apply(Product, %{or: %{
 
 
 
-### `NOT` operator
+#### `NOT` operator
 
 Performs a logical `NOT` operation on the specified `<operator-expression>` 
 
@@ -145,4 +149,75 @@ Filtery.apply(Product, %{or: %{
                          }})
 ```
 
+
+
+
+
+### 3. Extra operator
+
+`Filtery` provides some more useful operators to work with text and range.
+
+
+
+| Name                 | Description                                                  |
+| -------------------- | ------------------------------------------------------------ |
+| `:between`           | Matches values `>` lower bound and `<` upper bound           |
+| `:ibetween`          | Matches values `>=` lower bound and `<=`upper  bound         |
+| `like`, `contains`   | Match values which contains specific value                   |
+| `ilike`, `icontains` | Case insensitive version of `like`                           |
+| `has`                | For array type column, Matches array which has specific value |
+
+
+
+#### Syntax
+
+- `between` | `ibetween`
+
+  *Syntax*:  `field: {:between, [lower_value, upper_value]}`
+
+
+
+
+
+### Check `NULL` and skip `nil` filter
+
+By default is a value in the filter is `nil`, `Filtery` applies `is_nil` to check `NULL` value. You can tell `Filtery` to ignore all `nil` field by passing `skip_nil: true` to the options
+
+```elixir
+Filtery.apply(query, filter, skip_nil: true)
+```
+
+
+
+In that case, if you want to check field which is `NULL` or `NOT NULL` you use `:is_nil` instead of `nil` when passing value to the filter:
+
+```elixir
+Filter.apply(query, %{email: :is_nil}, skip_nil: true)
+```
+
+
+
+## Define your operators
+
+You can extend `Filtery` and define your own operator. For example, here I define a new operatory `equal`  
+
+```elixir
+defmodule MyFiltery do
+	use Filtery.Base
+	
+	def filter(column, {:equal, value}) do
+  	dynamic([q], field(q, ^column) == ^value)
+	end
+end
+```
+
+
+
+To support a filter, you must follow this spec
+
+```elixir
+@spec filter(column::atom(), {operator::atom(), value::any()}) :: Ecto.Query.dynamic()
+```
+
+Within the body of `filter/2` function using `dynamic` to compose your condtion and return a `dynamic`
 
