@@ -1,6 +1,6 @@
 defmodule Filtery do
   @doc """
-  `Filtery` help you to build the query using a similar syntax with MongoDB like this:
+  `Filtery` help you to build the query using a syntax which is similar to Mongo like this:
 
   ```elixir
   filter = %{
@@ -201,7 +201,7 @@ defmodule Filtery do
   """
 
   use Filtery.Base
-  @spec apply(Ecto.Queriable.t(), map() | keyword(), keyword()) :: Ecto.QueryError.t()
+  @spec apply(Ecto.Queriable.t(), map() | keyword(), keyword()) :: Ecto.Query.Queriable.t()
 
   def filter(column, {:equal, value}) do
     filter(column, {:eq, value})

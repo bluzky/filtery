@@ -1,6 +1,6 @@
 # Filtery
 
-**`Filtery` help you to build the query using a similar syntax with MongoDB**
+**`Filtery` help you to build the query using a syntax which is similar to Mongo**
 
 ## Installation
 
