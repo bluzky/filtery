@@ -1,6 +1,7 @@
 # Filtery
 
 **`Filtery` help you to build the query using a syntax which is similar to Mongo**
+This is super useful when you want to build filter from request params.
 
 ```elixir
 filter = %{
