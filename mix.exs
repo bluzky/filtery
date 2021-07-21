@@ -4,7 +4,7 @@ defmodule Filtery.MixProject do
   def project do
     [
       app: :filtery,
-      version: "0.1.0",
+      version: "0.2.0",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -40,7 +40,7 @@ defmodule Filtery.MixProject do
 
   defp description() do
     """
-    Compose your dynamic query with Mongo like filter
+    Compose your dynamic query with Mongo like query syntax
     """
   end
 
