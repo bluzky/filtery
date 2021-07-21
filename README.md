@@ -2,6 +2,15 @@
 
 **`Filtery` help you to build the query using a syntax which is similar to Mongo**
 
+```elixir
+filter = %{
+	status: "active",
+	email: {:not, nil},
+	role: ["admin", "moderator"]
+}
+Filtery.apply(User, filter)
+```
+
 ## Installation
 
 Add `filtery` to your list of dependencies in `mix.exs`:
@@ -16,8 +25,22 @@ end
 
 Documentation is published here [https://hexdocs.pm/filtery](https://hexdocs.pm/filtery).
 
+**Table of Contents**
 
-## Usage
+  - [Installation](#installation)
+  - [I. Usage](#i-usage)
+  - [II. Syntax](#ii-syntax)
+  - [III. Supported operator](#iii-supported-operator)
+      - [1. Comparition operator](#1-comparition-operator)
+      - [2. Logical operator](#2-logical-operator)
+      - [3. Extra operator](#3-extra-operator)
+      - [4. Check `NULL` and skip `nil` filter](#check-null-and-skip-nil-filter)
+  - [IV. Define your operators](#iv-define-your-operators)
+  - [V. Joining tables](#v-joining-tables)
+<!-- markdown-toc end -->
+
+
+## I. Usage
 
 `Filtery` help you to build the query using a similar syntax with MongoDB like this:
 
@@ -40,7 +63,7 @@ from(u in User, where: u.status == "active" and not is_nil(u.email) and u.role i
 
 
 
-## Syntax
+## II. Syntax 
 
 You can use `<field>: <value>` expressions to specify the equality condition and query operator expressions.
 
@@ -58,7 +81,7 @@ You can use `<field>: <value>` expressions to specify the equality condition and
 
 
 
-## Supported operator
+## III. Supported operator 
 
 
 
@@ -197,7 +220,7 @@ Filter.apply(query, %{email: :is_nil}, skip_nil: true)
 
 
 
-## Define your operators
+## IV. Define your operators 
 
 You can extend `Filtery` and define your own operator. For example, here I define a new operatory `equal`  
 
@@ -212,7 +235,6 @@ end
 ```
 
 
-
 To support a filter, you must follow this spec
 
 ```elixir
@@ -221,3 +243,55 @@ To support a filter, you must follow this spec
 
 Within the body of `filter/2` function using `dynamic` to compose your condtion and return a `dynamic`
 
+
+## V. Joining tables 
+
+**`Filtery` defines a special operator `ref` to join table**
+
+*Syntax*: `<field>: {:ref, <qualifier>, <filter on joined table>}`
+
+If `qualifier` is skipped, then `:inner` join is used by default.
+
+```elixir
+query = Filtery.apply(Post, %{comments: {:ref, %{
+                                    approved: true,
+                                    content: {:like, "filtery"}
+                                 }}})
+```
+
+And then you can use **Name binding** to do further query
+
+```elixir
+query = where(query, [comments: c], c.published_at > ^xday_ago)
+```
+
+
+
+**Qualifiers**
+
+By default `Filtery` join using `:inner` qualifier. You can use one of ``:inner`, `:left`, `:right`, `:cross`, `:full`, `:inner_lateral` or `:left_lateral` qualifier as defined by Ecto.
+
+
+
+### **You can filter with nested `ref`**
+
+```elixir
+Filtery.apply(Post, %{comments: {:ref, %{
+                                    approved: true,
+                                    user: {:ref, %{
+                                              name: {:like, "Tom"}
+                                           }}
+                                 }}})
+```
+
+
+
+
+
+### Important Notes on `ref` operator
+
+- Field name must be the association name in your schema because `Filtery` use `assoc` to build join query.
+
+  In the above example, `Post` schema must define association `has_many: :comments, Comment`
+
+- Not allow 2 ref with same name because the name is used as alias `:as` in join query, so it can only use one.
