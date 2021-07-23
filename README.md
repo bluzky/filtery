@@ -19,7 +19,7 @@ Add `filtery` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:filtery, "~> 0.1.0"}
+    {:filtery, "~> 0.2.0"}
   ]
 end
 ```
