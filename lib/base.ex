@@ -77,6 +77,7 @@ defmodule Filtery.Base do
           ft = filter(key, val)
 
           cond do
+            is_nil(ft) -> acc
             is_nil(acc) -> dynamic([..., q], ^ft)
             ft -> dynamic([..., q], ^acc and ^ft)
             true -> acc
@@ -89,6 +90,7 @@ defmodule Filtery.Base do
           ft = filter(key, val)
 
           cond do
+            is_nil(ft) -> acc
             is_nil(acc) -> dynamic([..., q], ^ft)
             ft -> dynamic([..., q], ^acc or ^ft)
             true -> acc
