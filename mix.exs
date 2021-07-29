@@ -5,7 +5,7 @@ defmodule Filtery.MixProject do
     [
       app: :filtery,
       version: "0.2.3",
-      elixir: "~> 1.13",
+      elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       docs: docs(),
