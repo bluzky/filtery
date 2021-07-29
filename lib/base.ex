@@ -42,12 +42,7 @@ defmodule Filtery.Base do
       defp filter_columns(query, filters, opts) do
         filters =
           if opts[:skip_nil] do
-            Enum.reject(filters, fn
-              {_, nil} -> true
-              {_, {_, nil}} -> true
-              {_, {_, {_, nil}}} -> true
-              _ -> false
-            end)
+            clean_nil(filters)
           else
             filters
           end
@@ -57,6 +52,22 @@ defmodule Filtery.Base do
           nil -> query
           d_query -> where(query, [q], ^d_query)
         end
+      end
+
+      defp clean_nil(filters) do
+        Enum.reject(filters, fn
+          {_, nil} -> true
+          {_, {_, nil}} -> true
+          {_, {_, {_, nil}}} -> true
+          _ -> false
+        end)
+        |> Enum.map(fn
+          {op, filter} when op in ~w(and or not)a ->
+            {op, clean_nil(filter)}
+
+          other ->
+            other
+        end)
       end
 
       # add single column query condition to existing query
