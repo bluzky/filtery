@@ -1,6 +1,6 @@
 # Filtery
 
-[![Build Status](https://github.com/bluzky/filtery/workflows/CI%20Build/badge.svg)](https://github.com/bluzky/filtery/actions) [![Coverage Status](https://coveralls.io/repos/github/bluzky/filtery/badge.svg?branch=master)](https://coveralls.io/github/bluzky/filtery?branch=master) [![Hex Version](https://img.shields.io/hexpm/v/filtery.svg)](https://hex.pm/packages/filtery) [![docs](https://img.shields.io/badge/docs-hexpm-blue.svg)](https://hexdocs.pm/filtery/)
+[![Build Status](https://github.com/bluzky/filtery/workflows/Elixir CI/badge.svg)](https://github.com/bluzky/filtery/actions) [![Coverage Status](https://coveralls.io/repos/github/bluzky/filtery/badge.svg?branch=master)](https://coveralls.io/github/bluzky/filtery?branch=master) [![Hex Version](https://img.shields.io/hexpm/v/filtery.svg)](https://hex.pm/packages/filtery) [![docs](https://img.shields.io/badge/docs-hexpm-blue.svg)](https://hexdocs.pm/filtery/)
 
 **`Filtery` help you to build the query using a syntax which is similar to Mongo**
 This is super useful when you want to build filter from request params.
