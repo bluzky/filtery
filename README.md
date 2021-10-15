@@ -288,9 +288,6 @@ Filtery.apply(Post, %{comments: {:ref, %{
 ```
 
 
-
-
-
 ### Important Notes on `ref` operator
 
 - Field name must be the association name in your schema because `Filtery` use `assoc` to build join query.
